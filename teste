@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+class Sonda{
+  private:
+    int posx;
+    int posy;
+    char dir[4] = {'N','S', 'E', 'W'};
+    int pos;
+  public:
+    Sonda(int x, int y, char dir){
+      this->setPosx(x);
+      this->setPosy(y);
+      this->setDir(dir);
+    }
+    void setPosx(int);
+    void setPosy(int);
+    void setDir(char);
+    int getPosx();
+    int getPosy();
+    char getDir();
+    int getPos();
+    void giraL();
+    void giraR();
+    void frente();
+};
+
+void Sonda::setPosx(int x){
+  this->posx = x;
+}
+
+void Sonda::setPosy(int y){
+  this->posy = y;
+}
+
+void Sonda::setDir(char dir){
+  this->dir = dir;
+}
+
+int Sonda::getPosx(){
+  return this->posx;
+}
+
+int Sonda::getPosy(){
+  return this->posy;
+}
+
+char Sonda::getDir(){
+  return this->dir;
+}
+
+char Sonda::direc(char dir, int t){
+
+}
+
+class Planalto{
+  private:
+    int tamx;
+    int tamy;
+    int quantSondas;
+  public:
+    Planalto(int x, int y){
+      this->setTamx(x);
+      this->setTamy(y);
+    }
+    ~Planalto();
+    void setTamx(int);
+    void setTamy(int);
+    void setQuant(int);
+    int getQuant();
+    int getTamx(int);
+    int getTamy(int);
+};
+
+int main(){
+
+}
