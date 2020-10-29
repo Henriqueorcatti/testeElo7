@@ -5,8 +5,7 @@ class Sonda{
   private:
     int posx;
     int posy;
-    char dir[4] = {'N','S', 'E', 'W'};
-    int pos;
+    char dir;
   public:
     Sonda(int x, int y, char dir){
       this->setPosx(x);
@@ -19,10 +18,9 @@ class Sonda{
     int getPosx();
     int getPosy();
     char getDir();
-    int getPos();
-    void giraL();
-    void giraR();
+    void gira(int);
     void frente();
+    int transf(char);
 };
 
 void Sonda::setPosx(int x){
@@ -49,8 +47,54 @@ char Sonda::getDir(){
   return this->dir;
 }
 
-char Sonda::direc(char dir, int t){
+int Sonda::transf(char dir){
 
+  switch(dir){
+    case 'N': return 1;
+      break;
+    case 'E': return 2;
+      break;
+    case 'S': return 3;
+      break;
+    case 'W': return 4;
+      break;
+  }
+}
+
+void Sonda::gira(int t){
+  int aux = this->transf(this->getDir()) + t;
+
+  if (aux == 0){
+    aux = 4;
+  }
+  else if(aux == 5){
+    aux = 1;
+  }
+
+  switch(aux){
+    case 1: this->setDir('N');
+      break;
+    case 2: this->setDir('E');
+      break;
+    case 3: this->setDir('S');
+      break;
+    case 4: this->setDir('W');
+      break;
+  }
+}
+
+void Sonda::frente(){
+  
+  switch(this->getDir()){
+    case 'N': this->setPosy(this->getPosy() + 1);
+      break;
+    case 'S': this->setPosy(this->getPosy() - 1);
+      break;
+    case 'E': this->setPosx(this->getPosx() + 1);
+      break;
+    case 'W': this->setPosx(this->getPosx() - 1);
+      break;
+  }
 }
 
 class Planalto{
@@ -63,14 +107,37 @@ class Planalto{
       this->setTamx(x);
       this->setTamy(y);
     }
-    ~Planalto();
     void setTamx(int);
     void setTamy(int);
     void setQuant(int);
     int getQuant();
-    int getTamx(int);
-    int getTamy(int);
+    int getTamx();
+    int getTamy();
 };
+
+void Planalto::setTamx(int x){
+  this->tamx = x;
+}
+
+void Planalto::setTamy(int y){
+  this->tamy = y;
+}
+
+void Planalto::setQuant(int quant){
+  this->quantSondas = quant;
+}
+
+int Planalto::getTamx(){
+  return this->tamx;
+}
+
+int Planalto::getTamy(){
+  return this->tamy;
+}
+
+int Planalto::getQuant(){
+  return this->quantSondas;
+}
 
 int main(){
 
