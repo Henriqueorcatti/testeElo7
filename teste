@@ -3,34 +3,39 @@
 #include <string>
 using namespace std;
 
-class Sonda{
+class Sonda{ // É criada a classe Sonda com todos os atributos que serão importantes para o problema
   private:
-    int posx;
-    int posy;
-    char dir;
+    int posx; // Posição x
+    int posy; // Posição y
+    char dir; // Direção da sonda
   public:
-    Sonda(int x, int y, char dir){
+    Sonda(int x, int y, char dir){ // Inicializador da sonda
       this->setPosx(x);
       this->setPosy(y);
       this->setDir(dir);
     }
-    void setPosx(int);
+    // métodos setters
+    void setPosx(int); 
     void setPosy(int);
     void setDir(char);
+    // métodos getters
     int getPosx();
     int getPosy();
     char getDir();
+    // métodos de movimentação
     void gira(int);
     void frente();
+    /// métodos auxiliares
     int transf(char);
     void mostra();
 };
 
-void Sonda::mostra(){
+void Sonda::mostra(){ //método de saída
   cout << this->posx << " " << this->posy << " " << this->dir << endl; 
 }
 
-void Sonda::setPosx(int x){
+// métodos setters
+void Sonda::setPosx(int x){ 
   this->posx = x;
 }
 
@@ -42,6 +47,7 @@ void Sonda::setDir(char dir){
   this->dir = dir;
 }
 
+// métodos getters
 int Sonda::getPosx(){
   return this->posx;
 }
@@ -54,7 +60,7 @@ char Sonda::getDir(){
   return this->dir;
 }
 
-int Sonda::transf(char dir){
+int Sonda::transf(char dir){ // transforma a direção em um número para que este seja utilizado de forma mais fácil
 
   switch(dir){
     case 'N': return 1;
@@ -69,6 +75,7 @@ int Sonda::transf(char dir){
 }
 
 void Sonda::gira(int t){
+  // utilizando o método transf, o método gira soma 1 caso o comando seja girar para a direita, e subtrai 1 caso o comando seja girar para a esquerda (fazendo as transformações necessárias caso o programa passe de 1-4). Depois, faz o set com a direção resultante
   int aux = this->transf(this->getDir()) + t;
 
   if (aux == 0){
@@ -91,7 +98,7 @@ void Sonda::gira(int t){
 }
 
 void Sonda::frente(){
-  
+ // movimenta para frente, alternando o modo de acordo com a direção da sonda 
   switch(this->getDir()){
     case 'N': this->setPosy(this->getPosy() + 1);
       break;
@@ -110,19 +117,23 @@ class Planalto{
     int tamy;
     int quantSondas;
   public:
+    // inicializador
     Planalto(int x, int y, int q){
       this->setTamx(x);
       this->setTamy(y);
       this->setQuant(q);
     }
+    // métodos setters
     void setTamx(int);
     void setTamy(int);
     void setQuant(int);
+    // métodos getters
     int getQuant();
     int getTamx();
     int getTamy();
 };
 
+//setters
 void Planalto::setTamx(int x){
   this->tamx = x;
 }
@@ -135,6 +146,7 @@ void Planalto::setQuant(int quant){
   this->quantSondas = quant;
 }
 
+//getters
 int Planalto::getTamx(){
   return this->tamx;
 }
@@ -152,18 +164,22 @@ int main(){
   char aux;
 
   cin >> px >> py;
-  Planalto planalto(px, py, 1);
+  Planalto planalto(px, py, 0);
 
   cout << "Inserir sonda S/N: ";
   cin >> aux;
 
   while (aux == 'S'){
+    planalto.setQuant(planalto.getQuant() + 1);
+
     int x, y;
     char d;
 
     cin >> x >> y >> d;
 
     Sonda sonda(x, y, d);
+
+    cin.ignore();
 
     string op;
 
@@ -178,10 +194,13 @@ int main(){
         case 'M': sonda.frente();
           break;
       }
-      sonda.mostra();
     }
+
+    sonda.mostra();
 
     cout << "Inserir sonda?\n";
     cin >> aux;
   }
+
+return 0;
 }
