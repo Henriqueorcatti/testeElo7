@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+#include <string>
 using namespace std;
 
 class Sonda{
@@ -21,7 +23,12 @@ class Sonda{
     void gira(int);
     void frente();
     int transf(char);
+    void mostra();
 };
+
+void Sonda::mostra(){
+  cout << this->posx << " " << this->posy << " " << this->dir << endl; 
+}
 
 void Sonda::setPosx(int x){
   this->posx = x;
@@ -103,9 +110,10 @@ class Planalto{
     int tamy;
     int quantSondas;
   public:
-    Planalto(int x, int y){
+    Planalto(int x, int y, int q){
       this->setTamx(x);
       this->setTamy(y);
+      this->setQuant(q);
     }
     void setTamx(int);
     void setTamy(int);
@@ -140,5 +148,40 @@ int Planalto::getQuant(){
 }
 
 int main(){
+  int px, py;
+  char aux;
 
+  cin >> px >> py;
+  Planalto planalto(px, py, 1);
+
+  cout << "Inserir sonda S/N: ";
+  cin >> aux;
+
+  while (aux == 'S'){
+    int x, y;
+    char d;
+
+    cin >> x >> y >> d;
+
+    Sonda sonda(x, y, d);
+
+    string op;
+
+    getline(cin, op);
+
+    for (int i = 0; op[i] != '\0' ; i++){
+      switch(op[i]){
+        case 'L': sonda.gira(-1);
+          break;
+        case 'R': sonda.gira(1);
+          break;
+        case 'M': sonda.frente();
+          break;
+      }
+      sonda.mostra();
+    }
+
+    cout << "Inserir sonda?\n";
+    cin >> aux;
+  }
 }
