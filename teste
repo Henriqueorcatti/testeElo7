@@ -56,19 +56,19 @@ class Sonda{ // É criada a classe Sonda com todos os atributos que serão impor
     int posx; // Posição x
     int posy; // Posição y
     char dir; // Direção da sonda
-    Sonda *prox;
+    Sonda *proximo;
   public:
-    Sonda(int x, int y, char dir, Sonda *s){ // Inicializador da sonda
+    Sonda(int x, int y, char dir){ // Inicializador da sonda
       this->setPosx(x);
       this->setPosy(y);
       this->setDir(dir);
-      this->setProx(s);
+      this->setProximo(NULL);
     }
     // métodos setters
     void setPosx(int); 
     void setPosy(int);
     void setDir(char);
-    void setProx(Sonda*);
+    void setProximo (Sonda *);
     // métodos getters
     int getPosx();
     int getPosy();
@@ -100,8 +100,8 @@ void Sonda::setDir(char dir){
   this->dir = dir;
 }
 
-void Sonda::setProx(Sonda *s){
-  this->setProx(s);
+void Sonda::setProximo (Sonda *p){
+  this->proximo = p;
 }
 
 // métodos getters
@@ -118,7 +118,7 @@ char Sonda::getDir(){
 }
 
 Sonda* Sonda::getProx(){
-  return this->prox;
+  return this->proximo;
 }
 
 int Sonda::transf(char dir){ // transforma a direção em um número para que este seja utilizado de forma mais fácil
@@ -228,7 +228,7 @@ void lista_Sondas::adiciona(Sonda *s){
       aux = aux->getProx();
     }
 
-    aux->setProx(s);
+    aux->setProximo(s);
   }
 }
 
@@ -241,6 +241,8 @@ Sonda* lista_Sondas::verifica(int x, int y){
     }
     aux = aux->getProx();
   }
+
+  return NULL;
 }
 
 int main(){
@@ -263,9 +265,15 @@ int main(){
 
     cin >> x >> y >> d;
 
-    Sonda *sonda = new Sonda(x, y, d, NULL);
+    cout << "aff\n";
+
+    Sonda *sonda = new Sonda(x, y, d);
+
+    cout << "Oi\n";
 
     lista->adiciona(sonda);
+
+    cout << "Tchau\n";
 
     cin.ignore();
 
