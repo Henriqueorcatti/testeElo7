@@ -3,6 +3,54 @@
 #include <string>
 using namespace std;
 
+class Planalto{
+  private:
+    int tamx;
+    int tamy;
+    int quantSondas;
+  public:
+    // inicializador
+    Planalto(int x, int y, int q){
+      this->setTamx(x);
+      this->setTamy(y);
+      this->setQuant(q);
+    }
+    // métodos setters
+    void setTamx(int);
+    void setTamy(int);
+    void setQuant(int);
+    // métodos getters
+    int getQuant();
+    int getTamx();
+    int getTamy();
+};
+
+//setters
+void Planalto::setTamx(int x){
+  this->tamx = x;
+}
+
+void Planalto::setTamy(int y){
+  this->tamy = y;
+}
+
+void Planalto::setQuant(int quant){
+  this->quantSondas = quant;
+}
+
+//getters
+int Planalto::getTamx(){
+  return this->tamx;
+}
+
+int Planalto::getTamy(){
+  return this->tamy;
+}
+
+int Planalto::getQuant(){
+  return this->quantSondas;
+}
+
 class Sonda{ // É criada a classe Sonda com todos os atributos que serão importantes para o problema
   private:
     int posx; // Posição x
@@ -24,10 +72,11 @@ class Sonda{ // É criada a classe Sonda com todos os atributos que serão impor
     char getDir();
     // métodos de movimentação
     void gira(int);
-    void frente();
+    int frente(Planalto);
     /// métodos auxiliares
     int transf(char);
     void mostra();
+    bool verifica(int, int, int);
 };
 
 void Sonda::mostra(){ //método de saída
@@ -97,66 +146,42 @@ void Sonda::gira(int t){
   }
 }
 
-void Sonda::frente(){
+bool Sonda::verifica(int p, int d, int t){
+  if(p + d < t && p + d >= 0){
+    return true;
+  }
+  return false;
+}
+
+int Sonda::frente(Planalto p){
  // movimenta para frente, alternando o modo de acordo com a direção da sonda 
   switch(this->getDir()){
-    case 'N': this->setPosy(this->getPosy() + 1);
+    case 'N': 
+      if(verifica(this->getPosy(), 1, p.getTamy())){
+        this->setPosy(this->getPosy() + 1);
+        return 0;
+      }
       break;
-    case 'S': this->setPosy(this->getPosy() - 1);
+    case 'S':
+      if(verifica(this->getPosy(), -1, p.getTamy())){
+        this->setPosy(this->getPosy() - 1);
+        return 0;
+      }
       break;
-    case 'E': this->setPosx(this->getPosx() + 1);
+    case 'E':
+      if(verifica(this->getPosx(), 1, p.getTamx())){
+        this->setPosx(this->getPosx() + 1);
+        return 0;
+      }
       break;
-    case 'W': this->setPosx(this->getPosx() - 1);
+    case 'W':
+      if(verifica(this->getPosx(), -1, p.getTamx())){
+        this->setPosx(this->getPosx() - 1);
+        return 0;
+      }
       break;
   }
-}
-
-class Planalto{
-  private:
-    int tamx;
-    int tamy;
-    int quantSondas;
-  public:
-    // inicializador
-    Planalto(int x, int y, int q){
-      this->setTamx(x);
-      this->setTamy(y);
-      this->setQuant(q);
-    }
-    // métodos setters
-    void setTamx(int);
-    void setTamy(int);
-    void setQuant(int);
-    // métodos getters
-    int getQuant();
-    int getTamx();
-    int getTamy();
-};
-
-//setters
-void Planalto::setTamx(int x){
-  this->tamx = x;
-}
-
-void Planalto::setTamy(int y){
-  this->tamy = y;
-}
-
-void Planalto::setQuant(int quant){
-  this->quantSondas = quant;
-}
-
-//getters
-int Planalto::getTamx(){
-  return this->tamx;
-}
-
-int Planalto::getTamy(){
-  return this->tamy;
-}
-
-int Planalto::getQuant(){
-  return this->quantSondas;
+  return 1;
 }
 
 int main(){
@@ -171,6 +196,7 @@ int main(){
 
   while (aux == 'S'){
     planalto.setQuant(planalto.getQuant() + 1);
+    int ci = 0;
 
     int x, y;
     char d;
@@ -191,10 +217,12 @@ int main(){
           break;
         case 'R': sonda.gira(1);
           break;
-        case 'M': sonda.frente();
+        case 'M': ci += sonda.frente(planalto);
           break;
       }
     }
+
+    cout << ci << " comando(s) ignorados. A sonda passaria do limite do planato\n";
 
     sonda.mostra();
 
