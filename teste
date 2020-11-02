@@ -206,7 +206,8 @@ class lista_Sondas{
     void setPrimeira(Sonda*);
     Sonda* getPrimeira();
     void adiciona(Sonda*);
-    Sonda* verifica(int, int);
+    Sonda* verifica(char, int, int);
+    int remove(Sonda*);
 };
 
 void lista_Sondas::setPrimeira(Sonda *s){
@@ -232,8 +233,19 @@ void lista_Sondas::adiciona(Sonda *s){
   }
 }
 
-Sonda* lista_Sondas::verifica(int x, int y){
+Sonda* lista_Sondas::verifica(char d, int x, int y){
   Sonda *aux = this->primeira;
+
+  switch(d){
+    case 'N': y += 1;
+      break;
+    case 'S': y -= 1;
+      break;
+    case 'W': x -= 1;
+      break;
+    case 'E': x += 1;
+      break;
+  }
 
   while(aux != NULL){
     if(aux->getPosx() == x && aux->getPosy() == y){
@@ -243,6 +255,27 @@ Sonda* lista_Sondas::verifica(int x, int y){
   }
 
   return NULL;
+}
+
+int lista_Sondas::remove(Sonda *s){
+  Sonda *aux = this->getPrimeira();
+
+  if(aux == s){
+    this->setPrimeira(aux->getProx());
+    return 1;
+  }
+  else{
+    int cont = 0;
+
+    while(aux->getProx() != s){
+      aux = aux->getProx();
+      cont += 1;
+    }
+
+    aux->setProximo(s->getProx());
+
+    return cont;
+  }
 }
 
 int main(){
@@ -287,12 +320,20 @@ int main(){
           break;
         case 'R': sonda->gira(1);
           break;
-        case 'M': ci += sonda->frente(planalto);
+        case 'M':
+          Sonda *auxiliar = lista->verifica(sonda->getDir(), sonda->getPosx(), sonda->getPosy());
+          if (auxiliar != NULL){
+            cout << "A sonda " << lista->remove(auxiliar) << " estava no caminho e foi retirada para que o trajeto fosse completo" << endl;
+            planalto.setQuant(planalto.getQuant() - 1);
+          }
+          ci += sonda->frente(planalto);
           break;
       }
     }
 
-    cout << ci << " comando(s) ignorados. A sonda passaria do limite do planato\n";
+    if (ci > 0){
+      cout << ci << " comando(s) ignorados. A sonda passaria do limite do planato\n";
+    }
 
     sonda->mostra();
 
