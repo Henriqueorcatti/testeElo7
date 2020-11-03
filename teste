@@ -56,7 +56,7 @@ class Sonda{ // É criada a classe Sonda com todos os atributos que serão impor
     int posx; // Posição x
     int posy; // Posição y
     char dir; // Direção da sonda
-    Sonda *proximo;
+    Sonda *proximo; // atributo que será usado na classe lista sondas para outras funções
   public:
     Sonda(int x, int y, char dir){ // Inicializador da sonda
       this->setPosx(x);
@@ -158,7 +158,7 @@ void Sonda::gira(int t){
   }
 }
 
-bool Sonda::verifica(int p, int d, int t){
+bool Sonda::verifica(int p, int d, int t){ // verifica se a sonda pode avançar naquela direção, p é a posição atual da sonda do respectivo eixo, d é a direção (1 / - 1) e t é o tamanho do terreno 
   if(p + d < t && p + d >= 0){
     return true;
   }
@@ -166,7 +166,7 @@ bool Sonda::verifica(int p, int d, int t){
 }
 
 int Sonda::frente(Planalto p){
- // movimenta para frente, alternando o modo de acordo com a direção da sonda 
+ // movimenta para frente, alternando o modo de acordo com a direção da sonda. Antes, verifica se pode
   switch(this->getDir()){
     case 'N': 
       if(verifica(this->getPosy(), 1, p.getTamy())){
@@ -196,7 +196,7 @@ int Sonda::frente(Planalto p){
   return 1;
 }
 
-class lista_Sondas{
+class lista_Sondas{ // classe que será usada para armazenas as sondas, que poderá trocar o comando entre as sondas, remover alguma sonda, entre outras funções que podem ser implementadas
   private:
     Sonda *primeira;
   public:
@@ -233,7 +233,7 @@ void lista_Sondas::adiciona(Sonda *s){
   }
 }
 
-Sonda* lista_Sondas::verifica(char d, int x, int y){
+Sonda* lista_Sondas::verifica(char d, int x, int y){ // verifica se há sondas no caminho. d, x e y são as informações da sonda atual (a que está sendo movimentada)
   Sonda *aux = this->primeira;
 
   switch(d){
@@ -251,13 +251,13 @@ Sonda* lista_Sondas::verifica(char d, int x, int y){
     if(aux->getPosx() == x && aux->getPosy() == y){
       return aux;
     }
-    aux = aux->getProx();
+    aux = aux->getProx(); // itera pelas sondas
   }
 
   return NULL;
 }
 
-int lista_Sondas::remove(Sonda *s){
+int lista_Sondas::remove(Sonda *s){ // remove a sonda
   Sonda *aux = this->getPrimeira();
 
   if(aux == s){
@@ -283,7 +283,7 @@ int main(){
   char aux;
 
   cin >> px >> py;
-  Planalto planalto(px, py, 0);
+  Planalto planalto(px+1, py+1, 0);
   lista_Sondas *lista = new lista_Sondas();
 
   cout << "Inserir sonda S/N: ";
@@ -298,15 +298,10 @@ int main(){
 
     cin >> x >> y >> d;
 
-    cout << "aff\n";
-
     Sonda *sonda = new Sonda(x, y, d);
-
-    cout << "Oi\n";
 
     lista->adiciona(sonda);
 
-    cout << "Tchau\n";
 
     cin.ignore();
 
@@ -337,7 +332,9 @@ int main(){
 
     sonda->mostra();
 
-    cout << "Inserir sonda?\n";
+    cin.clear();
+
+    cout << "Inserir outra sonda? S/N: ";
     cin >> aux;
   }
 
